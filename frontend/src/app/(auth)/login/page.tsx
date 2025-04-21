@@ -34,7 +34,6 @@ export default function LoginForm() {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
-
     if (formErrors[name as keyof LoginFormData]) {
       setFormErrors((prev) => ({ ...prev, [name]: undefined }))
     }
@@ -60,19 +59,16 @@ export default function LoginForm() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     if (!validateForm()) return
-
     setIsLoading(true)
     setError(null)
 
     try {
-        await clientFetch.post("/auth/login", {
-          email: formData.email,
-          password: formData.password,
-        })
-  
-        router.push("/")
+      await clientFetch.post("/auth/login", {
+        email: formData.email,
+        password: formData.password,
+      })
+      router.push("/")
     } catch (err) {
       setError("Invalid email or password. Please try again.")
     } finally {
@@ -81,17 +77,17 @@ export default function LoginForm() {
   }
 
   return (
-    <AuthLayout title="Welcome back" description="Enter your credentials to access your account">
-      <div className="space-y-6">
+    <AuthLayout title="Welcome Back" description="Enter your credentials to access your account">
+      <div className="max-w-xl w-full bg-white rounded-2xl shadow-xl p-8 space-y-6 backdrop-blur-lg bg-opacity-95">
         {error && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" className="bg-red-50 border-red-200 text-red-700">
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-indigo-800 font-semibold">Email</Label>
             <Input
               id="email"
               name="email"
@@ -99,13 +95,14 @@ export default function LoginForm() {
               placeholder="you@example.com"
               value={formData.email}
               onChange={handleChange}
+              className="border-indigo-200 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg"
               aria-invalid={!!formErrors.email}
             />
-            {formErrors.email && <p className="text-sm font-medium text-red-500">{formErrors.email}</p>}
+            {formErrors.email && <p className="text-sm font-medium text-red-600">{formErrors.email}</p>}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password" className="text-indigo-800 font-semibold">Password</Label>
             <div className="relative">
               <Input
                 id="password"
@@ -114,30 +111,35 @@ export default function LoginForm() {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
+                className="border-indigo-200 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg"
                 aria-invalid={!!formErrors.password}
               />
               <Button
                 type="button"
                 variant="ghost"
                 size="icon"
-                className="absolute right-0 top-0 h-full px-3"
+                className="absolute right-0 top-0 h-full px-3 text-indigo-600 hover:text-indigo-800"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
               </Button>
             </div>
-            {formErrors.password && <p className="text-sm font-medium text-red-500">{formErrors.password}</p>}
+            {formErrors.password && <p className="text-sm font-medium text-red-600">{formErrors.password}</p>}
           </div>
 
-          <Button type="submit" className="w-full bg-green-600 hover:bg-green-700" disabled={isLoading}>
+          <Button
+            type="submit"
+            className="w-full bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-700 hover:to-indigo-900 text-white rounded-lg shadow-md transition-all duration-300"
+            disabled={isLoading}
+          >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Signing in...
               </>
             ) : (
-              "Sign in"
+              "Sign In"
             )}
           </Button>
         </form>
@@ -145,16 +147,20 @@ export default function LoginForm() {
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
+              <div className="w-full border-t border-indigo-200" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="bg-gray-100 px-2 text-gray-500">Don't have an account?</span>
+              <span className="bg-white px-3 text-indigo-600 font-medium">Don't have an account?</span>
             </div>
           </div>
 
           <div className="mt-6">
-            <Button variant="outline" className="w-full" asChild>
-              <Link href="/signup">Sign up</Link>
+            <Button
+              variant="outline"
+              className="w-full border-indigo-300 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-800 rounded-lg"
+              asChild
+            >
+              <Link href="/signup">Sign Up</Link>
             </Button>
           </div>
         </div>
