@@ -100,7 +100,7 @@ export default function SignupForm() {
           password_confirmation: formData.confirmPassword,
           role_id: roleId,
         })
-  
+        console.log("Signup successful");
         router.push("/")
     } catch (err) {
       setError("Registration failed. Please try again.")
